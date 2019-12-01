@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.book.beans.Product;
 import com.book.utils.DBUtils;
 import com.book.utils.MyUtils;
 

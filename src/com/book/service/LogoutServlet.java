@@ -1,9 +1,6 @@
 package com.book.service;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.book.beans.UserAccount;
-import com.book.utils.DBUtils;
 import com.book.utils.MyUtils;
 
 @WebServlet(urlPatterns = { "/logout" })
