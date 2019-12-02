@@ -1,4 +1,7 @@
-Author: James Vo - 40021967 - SOEN387
+Author: 
+  - James Vo - 40021967 
+  - James Nguyen - 
+  - Benson Chan - 
 ===================================================================
 
 Part A - The Data Access Layer
