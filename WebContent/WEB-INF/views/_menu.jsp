@@ -7,6 +7,8 @@
    |
    <a href="${pageContext.request.contextPath}/productList">Product List</a>
    |
+  <!-- <a href="${pageContext.request.contextPath}/GetMessages">JSON</a> --> 
+   |
    <a href="${pageContext.request.contextPath}/userInfo">My Account Info</a>
    |
    <a href="${pageContext.request.contextPath}/login">Login</a>

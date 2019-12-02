@@ -33,17 +33,17 @@ public class ProductListServlet extends HttpServlet {
 	    	
 	    	HttpSession session = request.getSession();
 	    	 
-	        // Kiểm tra người dùng đã đăng nhập (login) chưa.
-	        UserAccount loginedUser = MyUtils.getLoginedUser(session);
-	 
-	        // Nếu chưa đăng nhập (login).
-	        if (loginedUser == null) {
-	            // Redirect (Chuyển hướng) tới trang login.
-	            response.sendRedirect(request.getContextPath() + "/login");
-	            return;
-	        }
-	        // Lưu thông tin vào request attribute trước khi forward (chuyển tiếp).
-	        request.setAttribute("user", loginedUser);
+	    	// Check User has logged on
+			UserAccount loginedUser = MyUtils.getLoginedUser(session);
+
+			// Not logged in
+			if (loginedUser == null) {
+				// Redirect to login page.
+				response.sendRedirect(request.getContextPath() + "/login");
+				return;
+			}
+			// Store info to the request attribute before forwarding.
+			request.setAttribute("user", loginedUser);
 	 
 	    	
 	        Connection conn = MyUtils.getStoredConnection(request);
@@ -56,13 +56,13 @@ public class ProductListServlet extends HttpServlet {
 	            e.printStackTrace();
 	            errorString = e.getMessage();
 	        }
-	        // Lưu thông tin vào request attribute trước khi forward sang views.
+	        // Store info in request attribute, before forward to views
 	        request.setAttribute("errorString", errorString);
 	        request.setAttribute("productList", list);
 	        
 	        
 	         
-	        // Forward sang /WEB-INF/views/productListView.jsp
+	        // Forward to /WEB-INF/views/productListView.jsp
 	        RequestDispatcher dispatcher = request.getServletContext()
 	                .getRequestDispatcher("/WEB-INF/views/productListView.jsp");
 	        dispatcher.forward(request, response);

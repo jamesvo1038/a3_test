@@ -33,7 +33,7 @@ public class JDBCFilter implements Filter {
 
 	}
 
-	// Kiểm tra mục tiêu của request hiện tại là 1 Servlet?
+	// Check the target of the request is a servlet?
 	private boolean needJDBC(HttpServletRequest request) {
 		System.out.println("JDBC Filter");
 		// 
@@ -56,7 +56,7 @@ public class JDBCFilter implements Filter {
 		Map<String, ? extends ServletRegistration> servletRegistrations = request.getServletContext()
 				.getServletRegistrations();
 
-		// Tập hợp tất cả các Servlet trong WebApp của bạn.
+		// Collection of all servlet in your Webapp.
 		Collection<? extends ServletRegistration> values = servletRegistrations.values();
 		for (ServletRegistration sr : values) {
 			Collection<String> mappings = sr.getMappings();
@@ -73,31 +73,31 @@ public class JDBCFilter implements Filter {
 
 		HttpServletRequest req = (HttpServletRequest) request;
 
-		// Chỉ mở connection (kết nối) đối với các request có đư�?ng dẫn đặc biệt.
-		// (Chẳng hạn đư�?ng dẫn tới các servlet, jsp, ..)
-		// 
-		// Tránh tình trạng mở Connection với các yêu cầu thông thư�?ng.
-		// (Chẳng hạn image, css, javascript,... )
-		// 
+		 // Only open connections for the special requests.
+        // (For example, the path to the servlet, JSP, ..)
+        // 
+        // Avoid open connection for commons request.
+        // (For example: image, css, javascript,... )
+        // 
 		if (this.needJDBC(req)) {
 
 			System.out.println("Open Connection for: " + req.getServletPath());
 
 			Connection conn = null;
 			try {
-				// Tạo đối tượng Connection kết nối database.
+				// Create a Connection.
 				conn = ConnectionUtils.getConnection();
-				// Sét tự động commit false, để chủ động đi�?u khiển.
+				// Set outo commit to false.
 				conn.setAutoCommit(false);
 
-				// Lưu trữ đối tượng Connection vào attribute của request.
+				// Store Connection object in attribute of request.
 				MyUtils.storeConnection(request, conn);
 
-				// Cho phép request đi tiếp.
-				// (�?i tới Filter tiếp theo hoặc đi tới mục tiêu).
+				// Allow request to go forward
+                // (Go to the next filter or target)
 				chain.doFilter(request, response);
 
-				// G�?i phương thức commit() để hoàn thành giao dịch với DB.
+				 // Invoke the commit() method to complete the transaction with the DB.
 				conn.commit();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -107,11 +107,11 @@ public class JDBCFilter implements Filter {
 				ConnectionUtils.closeQuietly(conn);
 			}
 		}
-		// Với các request thông thư�?ng (image,css,html,..)
-		// không cần mở connection.
+		// With commons requests (images, css, html, ..)
+        // No need to open the connection.
 		else {
-			// Cho phép request đi tiếp.
-			// (�?i tới Filter tiếp theo hoặc đi tới mục tiêu).
+			// Allow request to go forward
+            // (Go to the next filter or target)
 			chain.doFilter(request, response);
 		}
 

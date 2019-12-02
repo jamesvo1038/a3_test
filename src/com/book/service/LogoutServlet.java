@@ -16,49 +16,45 @@ import com.book.utils.MyUtils;
 public class LogoutServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public LogoutServlet() {
 		super();
 	}
-	
-	// Hiển thị trang Login.
-		@Override
-		protected void doGet(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
-			
-			HttpSession session = request.getSession();
-	    	 
-	        // Kiểm tra người dùng đã đăng nhập (login) chưa.
-	        UserAccount loginedUser = MyUtils.getLoginedUser(session);
-	 
-	        // Nếu chưa đăng nhập (login).
-	        if (loginedUser == null) {
-	            // Redirect (Chuyển hướng) tới trang login.
-	            response.sendRedirect(request.getContextPath() + "/login");
-	            return;
-	        }
-	        // Lưu thông tin vào request attribute trước khi forward (chuyển tiếp).
-	        request.setAttribute("user", loginedUser);
-	 
-	        
-			// Forward tới trang /WEB-INF/views/loginView.jsp
-			// (Người dùng không thể truy cập trực tiếp
-			// vào các trang JSP đặt trong thư mục WEB-INF).
-			RequestDispatcher dispatcher //
-			= this.getServletContext().getRequestDispatcher("/WEB-INF/views/logoutView.jsp");
 
-			dispatcher.forward(request, response);
-			
-			session.invalidate();
+	// Show Login page.		@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
+		HttpSession session = request.getSession();
+		// Check User has logged on
+		UserAccount loginedUser = MyUtils.getLoginedUser(session);
+
+		// Not logged in
+		if (loginedUser == null) {
+			// Redirect to login page.
+			response.sendRedirect(request.getContextPath() + "/login");
+			return;
 		}
+		// Store info to the request attribute before forwarding.
+		request.setAttribute("user", loginedUser);
 
-		
-		// Khi người nhập userName & password, và nhấn Submit.
-		// Phương thức này sẽ được thực thi.
-		@Override
-		protected void doPost(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
-			doGet(request, response);
-		}
+		// Forward to /WEB-INF/views/logoutView.jsp
+		// (Users can not access directly into JSP pages placed in WEB-INF)
+		RequestDispatcher dispatcher //
+		= this.getServletContext().getRequestDispatcher("/WEB-INF/views/logoutView.jsp");
+
+		dispatcher.forward(request, response);
+
+		session.invalidate();
+
+	}
+
+
+	// Khi người nhập userName & password, và nhấn Submit.
+	// Phương thức này sẽ được thực thi.
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
 }

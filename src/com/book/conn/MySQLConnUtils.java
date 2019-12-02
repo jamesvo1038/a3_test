@@ -22,7 +22,7 @@ public class MySQLConnUtils {
      Class.forName("com.mysql.jdbc.Driver");
   
     
-     // jdbc:mysql://localhost:3306/simplehr
+     // jdbc:mysql://localhost:3306/soen387a3
      String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
   
      Connection conn = DriverManager.getConnection(connectionURL, userName,

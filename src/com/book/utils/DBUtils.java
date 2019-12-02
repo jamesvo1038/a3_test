@@ -1,36 +1,24 @@
 package com.book.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
-import javax.servlet.http.Part;
-
-import com.book.beans.*;
-
+import com.book.DAO.BookTableGateWay;
+import com.book.beans.Product;
+import com.book.beans.UserAccount;
 
 
 public class DBUtils {
 
 
-	public static UserAccount findUser(Connection conn, //
-			String userName, String password) throws SQLException {
+	public static UserAccount findUser(Connection conn, String userName, String password) throws SQLException {
 
-		String sql = "Select a.User_Name, a.Password, a.Gender from User_Account a " //
-				+ " where a.User_Name = ? and a.password= ?";
-
-		PreparedStatement pstm = conn.prepareStatement(sql);
-		pstm.setString(1, userName);
-		pstm.setString(2, password);
-		ResultSet rs = pstm.executeQuery();
+		BookTableGateWay gw = new BookTableGateWay();
+		ResultSet rs = gw.findUsersByNamePass(conn, userName, password);
 
 		if (rs.next()) {
 			String gender = rs.getString("Gender");
@@ -45,13 +33,8 @@ public class DBUtils {
 
 	public static UserAccount findUser(Connection conn, String userName) throws SQLException {
 
-		String sql = "Select a.User_Name, a.Password, a.Gender from User_Account a "//
-				+ " where a.User_Name = ? ";
-
-		PreparedStatement pstm = conn.prepareStatement(sql);
-		pstm.setString(1, userName);
-
-		ResultSet rs = pstm.executeQuery();
+		BookTableGateWay gw = new BookTableGateWay();
+		ResultSet rs = gw.findUsersByName(conn, userName);
 
 		if (rs.next()) {
 			String password = rs.getString("Password");
@@ -66,11 +49,10 @@ public class DBUtils {
 	}
 
 	public static List<Product> queryProduct(Connection conn) throws SQLException {
-		String sql = "Select a.Code, a.Name, a.Price from Product a ";
 
-		PreparedStatement pstm = conn.prepareStatement(sql);
+		BookTableGateWay gw = new BookTableGateWay();
+		ResultSet rs = gw.queryProduct(conn);
 
-		ResultSet rs = pstm.executeQuery();
 		List<Product> list = new ArrayList<Product>();
 		while (rs.next()) {
 			String code = rs.getString("Code");
@@ -86,12 +68,9 @@ public class DBUtils {
 	}
 
 	public static Product findProduct(Connection conn, String code) throws SQLException {
-		String sql = "Select a.Code, a.Name, a.Price from Product a where a.Code=?";
 
-		PreparedStatement pstm = conn.prepareStatement(sql);
-		pstm.setString(1, code);
-
-		ResultSet rs = pstm.executeQuery();
+		BookTableGateWay gw = new BookTableGateWay();
+		ResultSet rs = gw.findProduct(conn, code);
 
 		while (rs.next()) {
 			String name = rs.getString("Name");
@@ -103,53 +82,25 @@ public class DBUtils {
 	}
 
 	public static void updateProduct(Connection conn, Product product) throws SQLException {
-		String sql = "Update Product set Name =?, Price=? where Code=? ";
 
-		PreparedStatement pstm = conn.prepareStatement(sql);
-
-		pstm.setString(1, product.getName());
-		pstm.setInt(2, product.getPrice());
-		pstm.setString(3, product.getCode());
-		pstm.executeUpdate();
+		BookTableGateWay gw = new BookTableGateWay();
+		gw.updateProduct(conn, product);
 	}
 
 	public static void insertProduct(Connection conn, Product product, InputStream is, String fileName) throws SQLException {
-		String sql = "Insert into Product(Code, Name,Price,image, Image_File_Name) values (?,?,?,?,?)";
+		BookTableGateWay gw = new BookTableGateWay();
+		gw.insertProduct(conn,  product, is, fileName);
 
-		PreparedStatement pstm = conn.prepareStatement(sql);
-
-		pstm.setString(1, product.getCode());
-		pstm.setString(2, product.getName());
-		pstm.setInt(3, product.getPrice());
-		if(is != null) {
-			// fetches input stream of the upload file for the blob column
-			pstm.setBlob(4, is);
-		}
-		pstm.setString(5,fileName);
-
-		//	pstm.setBytes(4, product.getImage());
-
-		pstm.executeUpdate();
 	}
 
-
-
 	public static void deleteProduct(Connection conn, String code) throws SQLException {
-		String sql = "Delete From Product where Code= ?";
-
-		PreparedStatement pstm = conn.prepareStatement(sql);
-
-		pstm.setString(1, code);
-
-		pstm.executeUpdate();
+		BookTableGateWay gw = new BookTableGateWay();
+		gw.deleteProduct(conn, code);
 	}
 
 	public static Product getImageInTable(Connection conn, String code) throws SQLException{
-		String sql = "Select p.Code,p.Name,p.Price,p.Image,p.Image_File_Name "//
-				+ " from Product p where p.code = ?";
-		PreparedStatement pstm = conn.prepareStatement(sql);
-		pstm.setString(1, code);
-		ResultSet rs = pstm.executeQuery();
+		BookTableGateWay gw = new BookTableGateWay();
+		ResultSet rs = gw.getImageInTable(conn, code);
 
 		if (rs.next()) {
 			String name = rs.getString("Name");

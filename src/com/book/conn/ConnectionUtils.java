@@ -8,15 +8,10 @@ public class ConnectionUtils {
     public static Connection getConnection() 
               throws ClassNotFoundException, SQLException {
  
-        // Ở đây tôi kết nối tới Oracle Database.
-        // (Bạn có thể thay đổi sử dụng database khác).
-        //return OracleConnUtils.getOracleConnection();
-         
-        // return OracleConnUtils.getOracleConnection();
+    	// Here I using MySQL Database.
+     
          return MySQLConnUtils.getMySQLConnection();
-        // return SQLServerConnUtils_JTDS.getSQLServerConnection_JTDS();
-        // return SQLServerConnUtils_SQLJDBC.getSQLServerConnection_SQLJDBC();
-        // return PostGresConnUtils.getPostGresConnection();
+        
     }
      
     public static void closeQuietly(Connection conn) {

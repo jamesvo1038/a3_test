@@ -24,14 +24,13 @@ public class LoginServlet extends HttpServlet {
 		super();
 	}
 
-	// Hiển thị trang Login.
+	// Show Login page.
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// Forward tới trang /WEB-INF/views/loginView.jsp
-		// (Người dùng không thể truy cập trực tiếp
-		// vào các trang JSP đặt trong thư mục WEB-INF).
+		// Forward to /WEB-INF/views/loginView.jsp
+		// (Users can not access directly into JSP pages placed in WEB-INF)
 		RequestDispatcher dispatcher //
 		= this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
 
@@ -39,8 +38,8 @@ public class LoginServlet extends HttpServlet {
 
 	}
 
-	// Khi người nhập userName & password, và nhấn Submit.
-	// Phương thức này sẽ được thực thi.
+	// When the user enters userName & password, and click Submit.
+	// This method will be executed.
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -59,7 +58,7 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			Connection conn = MyUtils.getStoredConnection(request);
 			try {
-				// Tìm user trong DB.
+				// Find the user in the DB.
 				user = DBUtils.findUser(conn, userName, password);
 
 				if (user == null) {
@@ -72,40 +71,39 @@ public class LoginServlet extends HttpServlet {
 				errorString = e.getMessage();
 			}
 		}
-		// Trong trường hợp có lỗi,
-		// forward (chuyển hướng) tới /WEB-INF/views/login.jsp
+		// If error, forward to /WEB-INF/views/login.jsp
 		if (hasError) {
 			user = new UserAccount();
 			user.setUserName(userName);
 			user.setPassword(password);
 
-			// Lưu các thông tin vào request attribute trước khi forward.
+			// Store information in request attribute, before forward.
 			request.setAttribute("errorString", errorString);
 			request.setAttribute("user", user);
 
-			// Forward (Chuyển tiếp) tới trang /WEB-INF/views/login.jsp
+			// Forward to /WEB-INF/views/login.jsp
 			RequestDispatcher dispatcher //
 			= this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
 
 			dispatcher.forward(request, response);
 		}
-		// Trường hợp không có lỗi.
-		// Lưu thông tin người dùng vào Session.
-		// Và chuyển hướng sang trang userInfo.
+		// If no error
+		// Store user information in Session
+		// And redirect to userInfo page.
 		else {
 			HttpSession session = request.getSession();
 			MyUtils.storeLoginedUser(session, user);
 
-			// Nếu người dùng chọn tính năng "Remember me".
+			 // If user checked "Remember me".
 			if (remember) {
 				MyUtils.storeUserCookie(response, user);
 			}
-			// Ngược lại xóa Cookie
+			// Else delete cookie.
 			else {
 				MyUtils.deleteUserCookie(response);
 			}
 
-			// Redirect (Chuyển hướng) sang trang /userInfo.
+			// Redirect to userInfo page.
 			response.sendRedirect(request.getContextPath() + "/userInfo");
 		}
 	}
