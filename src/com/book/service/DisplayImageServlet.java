@@ -42,6 +42,8 @@ public class DisplayImageServlet extends HttpServlet {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+	            
+	            request.setAttribute("errorString", errorString);
 	            // When no image found, should return error
 	            if(product == null) {
 	            	response.sendRedirect(request.getContextPath()+ "/images/noimg.jpg");

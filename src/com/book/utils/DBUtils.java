@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import javax.servlet.http.Part;
+
 import com.book.beans.*;
 
 
@@ -111,18 +113,26 @@ public class DBUtils {
 		pstm.executeUpdate();
 	}
 
-	public static void insertProduct(Connection conn, Product product) throws SQLException {
-		String sql = "Insert into Product(Code, Name,Price) values (?,?,?)";
+	public static void insertProduct(Connection conn, Product product, InputStream is, String fileName) throws SQLException {
+		String sql = "Insert into Product(Code, Name,Price,image, Image_File_Name) values (?,?,?,?,?)";
 
 		PreparedStatement pstm = conn.prepareStatement(sql);
 
 		pstm.setString(1, product.getCode());
 		pstm.setString(2, product.getName());
 		pstm.setInt(3, product.getPrice());
-		//pstm.setBytes(4, product.getImage());
+		if(is != null) {
+			// fetches input stream of the upload file for the blob column
+			pstm.setBlob(4, is);
+		}
+		pstm.setString(5,fileName);
+
+		//	pstm.setBytes(4, product.getImage());
 
 		pstm.executeUpdate();
 	}
+
+
 
 	public static void deleteProduct(Connection conn, String code) throws SQLException {
 		String sql = "Delete From Product where Code= ?";
@@ -136,20 +146,23 @@ public class DBUtils {
 
 	public static Product getImageInTable(Connection conn, String code) throws SQLException{
 		String sql = "Select p.Code,p.Name,p.Price,p.Image,p.Image_File_Name "//
-	              + " from Product p where p.code = ?";
-		  PreparedStatement pstm = conn.prepareStatement(sql);
-	      pstm.setString(1, code);
-	      ResultSet rs = pstm.executeQuery();
-		
-	      if (rs.next()) {
-	          String name = rs.getString("Name");
-	          int price = rs.getInt("Price");
-	          byte[] imageData = rs.getBytes("Image");
-	          String imageFileName = rs.getString("Image_File_Name");
-	          return new Product(code, name,price, imageFileName, imageData);
-	      }
+				+ " from Product p where p.code = ?";
+		PreparedStatement pstm = conn.prepareStatement(sql);
+		pstm.setString(1, code);
+		ResultSet rs = pstm.executeQuery();
+
+		if (rs.next()) {
+			String name = rs.getString("Name");
+			int price = rs.getInt("Price");
+			byte[] imageData = rs.getBytes("Image");
+			String imageFileName = rs.getString("Image_File_Name");
+			return new Product(code, name,price, imageFileName, imageData);
+		}
 		return null;
-		
+
 	}
+
+
+
 
 }
