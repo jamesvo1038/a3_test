@@ -1,7 +1,8 @@
 Author: 
   - James Vo - 40021967 
-  - James Nguyen - 
-  - Benson Chan - 
+  - James Nguyen 
+  - Benson Chan  
+------------------------------
 ===================================================================
 
 Part A - The Data Access Layer
