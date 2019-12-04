@@ -57,11 +57,11 @@ public class DBUtils {
 		while (rs.next()) {
 			String code = rs.getString("Code");
 			String name = rs.getString("Name");
-			int price = rs.getInt("Price");
+			int isbn = rs.getInt("ISBN");
 			Product product = new Product();
 			product.setCode(code);
 			product.setName(name);
-			product.setPrice(price);
+			product.setPrice(isbn);
 			list.add(product);
 		}
 		return list;
@@ -74,8 +74,9 @@ public class DBUtils {
 
 		while (rs.next()) {
 			String name = rs.getString("Name");
-			int price = rs.getInt("Price");
-			Product product = new Product(code, name, price);
+			int price = rs.getInt("ISBN");
+			String imageFileName = rs.getString("Image_File_Name");
+			Product product = new Product(code, name, price,imageFileName);
 			return product;
 		}
 		return null;
@@ -104,7 +105,7 @@ public class DBUtils {
 
 		if (rs.next()) {
 			String name = rs.getString("Name");
-			int price = rs.getInt("Price");
+			int price = rs.getInt("ISBN");
 			byte[] imageData = rs.getBytes("Image");
 			String imageFileName = rs.getString("Image_File_Name");
 			return new Product(code, name,price, imageFileName, imageData);

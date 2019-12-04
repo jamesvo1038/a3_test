@@ -1,12 +1,12 @@
--- ALTER TABLE product
--- MODIFY COLUMN price int;
+ -- ALTER TABLE PRODUCT
+ -- MODIFY COLUMN price int;
 
--- ALTER TABLE product
--- ADD image LONGBLOB not null;
+-- ALTER TABLE PRODUCT
+ -- ADD image LONGBLOB not null;
 
 
- -- ALTER TABLE product
- -- ADD IMAGE_FILE_NAME VARCHAR(255) not null;
+--  ALTER TABLE PRODUCT
+--  ADD IMAGE_FILE_NAME VARCHAR(255) not null;
 
 -- ALTER TABLE product
 -- DROP COLUMN IMAGE_DATA;
@@ -17,5 +17,6 @@
  
  -- ALTER TABLE product
  -- DROP COLUMN id ;
- 
+
+ALTER TABLE PRODUCT CHANGE price ISBN int;
 

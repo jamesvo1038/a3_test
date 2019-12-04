@@ -10,24 +10,24 @@ import com.book.beans.Product;
 
 public class BookTableGateWay {
 	// SQL Queries
-	static String findUser = "Select a.User_Name, a.Password, a.Gender from User_Account a " //
+	static String findUser = "Select a.User_Name, a.Password, a.Gender from USER_ACCOUNT a " //
 			+ " where a.User_Name = ? and a.password= ?";
 
-	static String findUser1 = "Select a.User_Name, a.Password, a.Gender from User_Account a "//
+	static String findUser1 = "Select a.User_Name, a.Password, a.Gender from USER_ACCOUNT a "//
 			+ " where a.User_Name = ? ";
 
-	static String queryProduct = "Select a.Code, a.Name, a.Price from Product a ";
+	static String queryProduct = "Select a.Code, a.Name, a.ISBN from PRODUCT a ";
 
-	static String findProduct = "Select a.Code, a.Name, a.Price from Product a where a.Code=?";
+	static String findProduct = "Select a.Code, a.Name, a.ISBN, a.Image_File_Name from PRODUCT a where a.Code=?";
 
-	static String updateProduct = "Update Product set Name =?, Price=? where Code=? ";
+	static String updateProduct = "Update PRODUCT set Name =?, ISBN=? where Code=? ";
 
-	static String insertProduct = "Insert into Product(Code, Name,Price,image, Image_File_Name) values (?,?,?,?,?)";
+	static String insertProduct = "Insert into PRODUCT(Code, Name,ISBN,image, Image_File_Name) values (?,?,?,?,?)";
 
-	static String deleteProduct = "Delete From Product where Code= ?";
+	static String deleteProduct = "Delete From PRODUCT where Code= ?";
 
-	static String getImageInTable = "Select p.Code,p.Name,p.Price,p.Image,p.Image_File_Name "//
-			+ " from Product p where p.code = ?";
+	static String getImageInTable = "Select p.Code,p.Name,p.ISBN,p.Image,p.Image_File_Name "//
+			+ " from PRODUCT p where p.code = ?";
 
 	// Methods for all interaction with the database.
 	public ResultSet findUsersByNamePass(Connection conn,String userName, String password) throws SQLException {
